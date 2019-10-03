@@ -11,8 +11,8 @@
   "dependencies": {
     "@types/node": "^12.7.9",
     "gh-badges": "^2.2.1",
-    "newman": "^4.5.0",
-    "newman-reporter-htmlextra": "^1.7.4",
+    "newman": "^4.5.5",
+    "newman-reporter-htmlextra": "^1.8.9",
     "ts-node": "^8.4.1",
     "typescript": "^3.6.3"
   }
