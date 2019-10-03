@@ -1,0 +1,98 @@
+image: node:12-alpine
+
+variables:
+  ENVIRONMENT_NAME: DEV
+  ENVIRONMENT_UID: 2884316-76891077-a9df-43a6-9218-ab89c00b7fc9
+  APIKEY: 4689f745f1ab4b7e9404a0aa8d0188f9
+
+stages:
+  - test
+  - create-badge
+  - test-coverage-publish
+
+.test: &test
+  stage: test
+  script:
+    - yarn
+    - yarn newman run -e https://api.getpostman.com/environments/$ENVIRONMENT_UID?apikey=$APIKEY https://api.getpostman.com/collections/$COLLECTION_UID?apikey=$APIKEY --reporters htmlextra,cli,json --reporter-json-export newman/"$COLLECTION_UID"/output.json --reporter-htmlextra-export newman/"$COLLECTION_UID"/index.html --reporter-htmlextra-title "$COLLECTION_NAME - $ENVIRONMENT_NAME"
+  artifacts:
+    expire_in: 30 mins
+    paths:
+      - newman/$COLLECTION_UID
+    when: always
+
+.create-badge: &create-badge
+  stage: create-badge
+  script:
+    - yarn
+    - COLLECTION_NAME=$COLLECTION_NAME COLLECTION_UID=$COLLECTION_UID ENVIRONMENT_NAME=$ENVIRONMENT_NAME node ./scripts/createBadge.js
+  artifacts:
+    expire_in: 30 mins
+    paths:
+      - newman/$COLLECTION_UID
+  when: always
+
+.test-coverage-publish: &test-coverage-publish
+  image: python:latest
+  stage: test-coverage-publish
+  script:
+    - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+    - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+    - export AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION
+    - pip install awscli
+    - aws s3 sync ./newman/"$COLLECTION_UID" s3://$S3_BUCKET_NAME/agro-manager/integration-tests/$ENVIRONMENT_NAME/$COLLECTION_NAME
+  when: always
+
+test:plots:
+  variables:
+    COLLECTION_UID: 2884316-531e0345-3bf6-4e1f-9026-1c85fc19190b
+    COLLECTION_NAME: plots
+  <<: *test
+
+test:crops:
+  variables:
+    COLLECTION_UID: 2884316-30f82349-5f30-42f5-af11-8eecf6ff2b4f
+    COLLECTION_NAME: crops
+  <<: *test
+
+test:interventions:
+  variables:
+    COLLECTION_UID: 2884316-d099b1e1-35e7-4654-b902-7dc7a8b9a255
+    COLLECTION_NAME: interventions
+  <<: *test
+
+create-badge:plots:
+  variables:
+    COLLECTION_UID: 2884316-531e0345-3bf6-4e1f-9026-1c85fc19190b
+    COLLECTION_NAME: plots
+  <<: *create-badge
+
+create-badge:crops:
+  variables:
+    COLLECTION_UID: 2884316-30f82349-5f30-42f5-af11-8eecf6ff2b4f
+    COLLECTION_NAME: crops
+  <<: *create-badge
+
+create-badge:interventions:
+  variables:
+    COLLECTION_UID: 2884316-d099b1e1-35e7-4654-b902-7dc7a8b9a255
+    COLLECTION_NAME: interventions
+  <<: *create-badge
+
+test-coverage-publish:plots:
+  variables:
+    COLLECTION_UID: 2884316-531e0345-3bf6-4e1f-9026-1c85fc19190b
+    COLLECTION_NAME: plots
+  <<: *test-coverage-publish
+
+test-coverage-publish:crops:
+  variables:
+    COLLECTION_UID: 2884316-30f82349-5f30-42f5-af11-8eecf6ff2b4f
+    COLLECTION_NAME: crops
+  <<: *test-coverage-publish
+
+test-coverage-publish:interventions:
+  variables:
+    COLLECTION_UID: 2884316-d099b1e1-35e7-4654-b902-7dc7a8b9a255
+    COLLECTION_NAME: interventions
+  <<: *test-coverage-publish

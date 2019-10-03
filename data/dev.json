@@ -1,0 +1,13 @@
+{
+    "environment": {
+        "id": "6cde075d-764f-4dd4-8d9a-1d0d5d0d1af5",
+        "name": "DEV",
+        "values": [
+            {
+                "key": "baseUrl",
+                "value": "http://localhost:2000",
+                "enabled": true
+            }
+        ]
+    }
+}

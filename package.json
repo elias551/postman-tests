@@ -1,0 +1,19 @@
+{
+  "name": "postman-tests",
+  "version": "0.1.0",
+  "description": "postman tests",
+  "license": "UNLICENSED",
+  "scripts": {
+    "test:badge": "TEST_FILE=plots ENVIRONMENT=DEV node ./scripts/createBadge.js",
+    "test:report": "bash run.sh",
+    "start": "ts-node server.ts"
+  },
+  "dependencies": {
+    "@types/node": "^12.7.9",
+    "gh-badges": "^2.2.1",
+    "newman": "^4.5.0",
+    "newman-reporter-htmlextra": "^1.7.4",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.3"
+  }
+}

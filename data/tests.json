@@ -1,0 +1,352 @@
+{
+    "collection": {
+        "info": {
+            "_postman_id": "048d7d9c-f54c-43c4-9b18-0b032d14d4c2",
+            "name": "api tests",
+            "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+        },
+        "item": [
+            {
+                "name": "invalid login",
+                "event": [
+                    {
+                        "listen": "test",
+                        "script": {
+                            "id": "1fd941f0-7e0b-47e3-be49-2953c661f0ad",
+                            "exec": [
+                                "pm.test(\"Status code is 403\", function () {",
+                                "    pm.response.to.have.status(403);",
+                                "});"
+                            ],
+                            "type": "text/javascript"
+                        }
+                    }
+                ],
+                "_postman_id": "0b2a098f-70ab-455b-a676-f8d76f547fb2",
+                "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                },
+                "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                        "raw": "{{baseUrl}}/login?user=tata&pass=titi",
+                        "host": [
+                            "{{baseUrl}}"
+                        ],
+                        "path": [
+                            "login"
+                        ],
+                        "query": [
+                            {
+                                "key": "user",
+                                "value": "tata",
+                                "type": "text"
+                            },
+                            {
+                                "key": "pass",
+                                "value": "titi",
+                                "type": "text"
+                            }
+                        ]
+                    }
+                },
+                "response": []
+            },
+            {
+                "name": "login",
+                "event": [
+                    {
+                        "listen": "test",
+                        "script": {
+                            "id": "302bf89d-841f-4feb-9369-186bff73c812",
+                            "exec": [
+                                "pm.test(\"Status code is 200\", function () {",
+                                "    pm.response.to.have.status(200);",
+                                "});",
+                                "pm.test(\"has token\", function () {",
+                                "    var jsonData = pm.response.json();",
+                                "    pm.expect(jsonData.token.length).to.gt(0);",
+                                "    pm.globals.set(\"auth_token\", jsonData.token);",
+                                "});"
+                            ],
+                            "type": "text/javascript"
+                        }
+                    }
+                ],
+                "_postman_id": "ee06b632-9251-4f33-84f6-550db8b6f9be",
+                "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                },
+                "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                        "raw": "{{baseUrl}}/login?user=toto&pass=toto",
+                        "host": [
+                            "{{baseUrl}}"
+                        ],
+                        "path": [
+                            "login"
+                        ],
+                        "query": [
+                            {
+                                "key": "user",
+                                "value": "toto"
+                            },
+                            {
+                                "key": "pass",
+                                "value": "toto"
+                            }
+                        ]
+                    }
+                },
+                "response": []
+            },
+            {
+                "name": "users",
+                "event": [
+                    {
+                        "listen": "test",
+                        "script": {
+                            "id": "54da3824-25f0-4c93-b10f-b637202561c5",
+                            "exec": [
+                                "pm.test(\"Status code is 200\", function () {",
+                                "    pm.response.to.have.status(200);",
+                                "});",
+                                "pm.test(\"Your test name\", function () {",
+                                "    var jsonData = pm.response.json();",
+                                "    pm.expect(jsonData.length).to.eql(2);",
+                                "});",
+                                "pm.test(\"Response time is less than 200ms\", function () {",
+                                "    pm.expect(pm.response.responseTime).to.be.below(200);",
+                                "});"
+                            ],
+                            "type": "text/javascript"
+                        }
+                    }
+                ],
+                "_postman_id": "29c2de73-3396-4526-9333-8dceff0126d1",
+                "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                },
+                "request": {
+                    "auth": {
+                        "type": "bearer",
+                        "bearer": [
+                            {
+                                "key": "token",
+                                "value": "{{auth_token}}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                        "raw": "{{baseUrl}}/users",
+                        "host": [
+                            "{{baseUrl}}"
+                        ],
+                        "path": [
+                            "users"
+                        ]
+                    }
+                },
+                "response": [
+                    {
+                        "id": "feb7cbf8-f6b7-40df-b883-e239e0baeea4",
+                        "name": "R1",
+                        "originalRequest": {
+                            "method": "GET",
+                            "header": [],
+                            "url": {
+                                "raw": "https://ea50b4e6-4848-4c6d-8c19-088ad71c07cd.mock.pstmn.io/users/1",
+                                "protocol": "https",
+                                "host": [
+                                    "ea50b4e6-4848-4c6d-8c19-088ad71c07cd",
+                                    "mock",
+                                    "pstmn",
+                                    "io"
+                                ],
+                                "path": [
+                                    "users",
+                                    "1"
+                                ]
+                            }
+                        },
+                        "status": "OK",
+                        "code": 200,
+                        "_postman_previewlanguage": "json",
+                        "header": [
+                            {
+                                "key": "Access-Control-Allow-Origin",
+                                "value": "*"
+                            },
+                            {
+                                "key": "Content-Encoding",
+                                "value": "gzip"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json; charset=utf-8"
+                            },
+                            {
+                                "key": "Date",
+                                "value": "Wed, 02 Oct 2019 09:16:26 GMT"
+                            },
+                            {
+                                "key": "ETag",
+                                "value": "W/\"af-GpPmRW0ySclCbQDmlVYDXw7rYA4\""
+                            },
+                            {
+                                "key": "Server",
+                                "value": "nginx"
+                            },
+                            {
+                                "key": "Vary",
+                                "value": "Accept-Encoding"
+                            },
+                            {
+                                "key": "x-srv-span",
+                                "value": "v=1;s=5531fc00c0ad8239"
+                            },
+                            {
+                                "key": "x-srv-trace",
+                                "value": "v=1;t=24f52438e3490e26"
+                            },
+                            {
+                                "key": "Content-Length",
+                                "value": "148"
+                            },
+                            {
+                                "key": "Connection",
+                                "value": "keep-alive"
+                            }
+                        ],
+                        "cookie": [],
+                        "responseTime": null,
+                        "body": "{\n    \"id\": 1,\n    \"name\": \"toto\"\n}"
+                    }
+                ]
+            },
+            {
+                "name": "user",
+                "event": [
+                    {
+                        "listen": "test",
+                        "script": {
+                            "id": "c01e7080-857b-4bb1-820a-eafe9f5fa0e2",
+                            "exec": [
+                                "pm.test(\"Status code is 200\", function () {",
+                                "    pm.response.to.have.status(200);",
+                                "});",
+                                "pm.test(\"Your test name\", function () {",
+                                "    var jsonData = pm.response.json();",
+                                "    pm.expect(jsonData.id).to.eql(\"1\");",
+                                "});"
+                            ],
+                            "type": "text/javascript"
+                        }
+                    }
+                ],
+                "_postman_id": "1e8457f9-4a2d-42b5-870c-cfd9db713391",
+                "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                },
+                "request": {
+                    "auth": {
+                        "type": "bearer",
+                        "bearer": [
+                            {
+                                "key": "token",
+                                "value": "{{auth_token}}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                        "raw": "{{baseUrl}}/users/1",
+                        "host": [
+                            "{{baseUrl}}"
+                        ],
+                        "path": [
+                            "users",
+                            "1"
+                        ]
+                    }
+                },
+                "response": []
+            },
+            {
+                "name": "invalid route",
+                "event": [
+                    {
+                        "listen": "test",
+                        "script": {
+                            "id": "5b5c4fbb-6e15-4112-a2ec-1897d9281152",
+                            "exec": [
+                                "pm.test(\"Status code is 404\", function () {",
+                                "    pm.response.to.have.status(404);",
+                                "});"
+                            ],
+                            "type": "text/javascript"
+                        }
+                    }
+                ],
+                "_postman_id": "db899516-4088-4c24-bf23-56436920f795",
+                "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                },
+                "request": {
+                    "auth": {
+                        "type": "bearer",
+                        "bearer": [
+                            {
+                                "key": "token",
+                                "value": "{{auth_token}}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                        "raw": "{{baseUrl}}/invalid",
+                        "host": [
+                            "{{baseUrl}}"
+                        ],
+                        "path": [
+                            "invalid"
+                        ]
+                    }
+                },
+                "response": []
+            }
+        ],
+        "event": [
+            {
+                "listen": "prerequest",
+                "script": {
+                    "id": "6667b6c1-d3ca-4acb-ad0f-ca8cdebacc4f",
+                    "type": "text/javascript",
+                    "exec": [
+                        ""
+                    ]
+                }
+            },
+            {
+                "listen": "test",
+                "script": {
+                    "id": "0f4b0a86-eac5-43fb-a7a2-a10efa59b461",
+                    "type": "text/javascript",
+                    "exec": [
+                        ""
+                    ]
+                }
+            }
+        ]
+    }
+}
